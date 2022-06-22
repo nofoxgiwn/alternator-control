@@ -19,6 +19,7 @@ struct {
 double afterStartVoltage = 13.2;
 double chargeVoltage = 14.4;
 double maxVoltage = 14.7;
+double emergencyOffVoltage = 15.0;
 double batteryLightVoltage = 12.8;
 uint32_t startupDelay = 25000;
 uint32_t fullChargeDelay = 85000;
@@ -41,6 +42,16 @@ float calculateInputVoltage(int analogRaw) {
   return analogVoltage / (r2/(r1+r2));
 }
 
+void serialProtocol() {
+  Serial.print(millis());
+  Serial.print(";");
+  Serial.print(inputVoltage);
+  Serial.print(";");
+  Serial.print(targetVoltage);
+  Serial.print(";");
+  Serial.println(outputPWM);
+}
+
 void setup() {
   pinMode(FIELD, OUTPUT);
   pinMode(LIGHT, OUTPUT);
@@ -48,6 +59,7 @@ void setup() {
   digitalWrite(LIGHT, LOW);
   startTime = millis();
   initPID();
+  Serial.begin(9600);
 }
 
 void loop() {
@@ -77,8 +89,11 @@ void loop() {
   } else {
     outputPWM = int(targetPWM);
   }
-  analogWrite(FIELD, outputPWM);
 
-  delay(10);
-
+  if(inputVoltage < emergencyOffVoltage) {
+    analogWrite(FIELD, outputPWM);
+  } else {
+    digitalWrite(FIELD, LOW);
+  }
+  serialProtocol();
 }
