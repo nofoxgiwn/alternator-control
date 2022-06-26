@@ -8,21 +8,21 @@ double r1 = 46.03;
 double r2 = 9.89;
 
 struct {
-  uint8_t kp = 6;
-  uint8_t ki = 150;
-  uint8_t kd = 0;
+  uint8_t kp = 30;
+  uint8_t ki = 1;
+  uint8_t kd = 5;
   uint8_t sampleTime = 100;
   double lowerLimit = 255 * 0.20; // 20% dc
   double upperLimit = 255 * 0.85; // 85% dc
 } pidParameter;
 
-double afterStartVoltage = 13.2;
+double afterStartVoltage = 13.4;
 double chargeVoltage = 14.4;
-double maxVoltage = 14.7;
-double emergencyOffVoltage = 15.0;
-double batteryLightVoltage = 12.8;
-uint32_t startupDelay = 25000;
-uint32_t fullChargeDelay = 85000;
+double maxVoltage = 14.6;
+double emergencyOffVoltage = 14.8;
+double batteryLightVoltage = 12.7;
+uint32_t startupDelay = 20000;
+uint32_t fullChargeDelay = 60000;
 
 uint8_t outputPWM = 0;
 double targetVoltage, inputVoltage, targetPWM;
